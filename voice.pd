@@ -1,4 +1,4 @@
-#N canvas 297 34 918 645 10;
+#N canvas 734 121 1061 674 10;
 #X obj 170 44 inlet;
 #X floatatom 206 172 5 0 500 2 size - -;
 #X obj 694 128 inlet;
@@ -20,22 +20,22 @@
 #N canvas 230 114 625 534 shape-to-osc 0;
 #X obj -5 252 tabosc4~;
 #X obj 111 46 r main-dollar-0;
-#X msg -19 137 set 1003-wavetable-0;
+#X msg -19 137 set 1002-wavetable-0;
 #X msg 110 79 set set \$1-wavetable-0;
 #X msg 123 101 set set \$1-wavetable-1;
 #X msg 146 124 set set \$1-wavetable-2;
 #X msg 165 145 set set \$1-wavetable-3;
 #X msg 182 166 set set \$1-wavetable-4;
-#X msg 17 181 set 1003-wavetable-2;
-#X msg 37 203 set 1003-wavetable-3;
-#X msg 54 224 set 1003-wavetable-4;
+#X msg 17 181 set 1002-wavetable-2;
+#X msg 37 203 set 1002-wavetable-3;
+#X msg 54 224 set 1002-wavetable-4;
 #X obj -5 413 outlet~;
 #X obj 76 9 inlet~;
-#X msg -6 159 set 1003-wavetable-1;
+#X msg -6 159 set 1002-wavetable-1;
 #X obj -6 363 spigot~;
 #X obj 83 277 noise~;
 #X obj 83 363 spigot~;
-#X obj 221 328 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 221 328 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj -33 5 inlet;
 #X obj -33 31 select 5;
@@ -149,7 +149,7 @@
 #X coords 0 -1 1 1 60 40 1 100 100;
 #X restore 238 368 pd color-to-filterbank;
 #X obj 251 197 hradio 15 1 1 6 empty empty empty 0 -8 0 10 -262144
--1 -1 5;
+-1 -1 2;
 #X obj 102 122 tgl 15 0 empty empty mute 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 563 589 spigot~;
@@ -172,7 +172,7 @@
 #X text 661 72 sample;
 #X obj 606 105 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#N canvas 0 0 450 300 (subpatch) 0;
+#N canvas 0 22 450 300 (subpatch) 0;
 #X array \$0-grain 1000 float 2;
 #X coords 0 1 999 -1 200 80 1 0 0;
 #X restore 0 40 graph;
@@ -188,13 +188,13 @@
 #X connect 9 0 8 0;
 #X coords 0 -1 1 1 200 120 1 0 0;
 #X restore 574 271 pd granular-sample;
-#N canvas 0 0 1362 695 granular-osc 0;
-#X obj 160 42 inlet;
+#N canvas 250 155 1362 695 granular-osc 0;
+#X obj 142 18 inlet;
 #X text 202 42 frequency;
 #X obj 163 64 sig~;
 #X obj 122 300 outlet~;
 #X floatatom 321 49 5 0 0 0 - - -;
-#N canvas 644 119 450 300 reader~ 0;
+#N canvas 465 166 450 300 reader~ 0;
 #X obj 65 100 tabread4~ \$0-grain;
 #X obj 65 56 phasor~;
 #X obj 65 78 *~ 1000;
@@ -277,7 +277,7 @@
 #X connect 17 0 16 0;
 #X restore 644 433 pd granular-osc;
 #X obj 788 177 metrum 400 0;
-#N canvas 579 0 450 679 y-to-cutoff 0;
+#N canvas 387 128 450 679 y-to-cutoff 1;
 #X obj 49 8 inlet;
 #X obj 206 35 inlet~;
 #X obj 86 263 outlet~;
@@ -294,6 +294,7 @@
 #X floatatom 34 62 5 0 0 0 - - -;
 #X msg 154 199 2;
 #X obj 41 38 expr $f1*85 + 45;
+#X obj 128 17 r \$1-init-voices;
 #X connect 0 0 14 0;
 #X connect 1 0 7 0;
 #X connect 1 0 10 0;
@@ -310,6 +311,7 @@
 #X connect 12 0 11 0;
 #X connect 13 0 10 2;
 #X connect 14 0 12 0;
+#X connect 15 0 13 0;
 #X coords 0 -1 1 1 60 40 1 100 100;
 #X restore 563 464 pd y-to-cutoff;
 #X obj 564 616 pan~;
@@ -320,15 +322,15 @@
 #X obj 345 263 noise~;
 #X obj 398 253 vline~;
 #X msg 397 135 0 \, 1 0.5 \, 0 0.5 0.5;
-#N canvas 0 0 450 300 (subpatch) 0;
+#N canvas 0 22 450 300 (subpatch) 0;
 #X array \$0-frequency-envelope 50 float 1;
-#A 0 0.0265793 0.0667846 0.145513 0.0283427 0.079251 0.203812 0.256394
-0.248456 0.35228 0.231028 0.290989 0.291538 0.355934 0.359171 0.421554
-0.417865 0.518596 0.607041 0.54549 0.644991 0.738326 0.662427 0.651591
-0.60987 0.697123 0.54226 0.583905 0.446069 0.407727 0.502751 0.368298
-0.288749 0.253273 0.307473 0.368383 0.34394 0.126156 0.12957 0.105731
-0.204633 0.196265 0.0658649 0.0364357 0.0867209 -0.00889042 -0.0418797
--0.0302635 0.038742 0.010086 0.0896856;
+#A 0 0.12122 0.0214644 0.191022 0.074001 0.115557 0.0987677 0.167649
+0.282762 0.262455 0.334687 0.294816 0.36518 0.332078 0.455313 0.524886
+0.550886 0.598443 0.519989 0.586737 0.611357 0.672239 0.750997 0.733254
+0.590794 0.696336 0.562454 0.486446 0.552078 0.573836 0.439201 0.345258
+0.350506 0.288977 0.37364 0.322746 0.171813 0.127255 0.136685 0.147544
+0.117018 0.124894 0.160628 0.021673 -0.0928929 0.0302363 -0.0708556
+0.0204195 -0.038462 -0.000747603 0.0426912;
 #X coords 0 1 49 -1 200 100 1 0 0;
 #X restore 100 140 graph;
 #X obj 36 246 *~ 50;
@@ -339,7 +341,7 @@
 #X msg 327 206 bang;
 #X msg 544 126 0 \, 1 0.5 \, 0 0.5 0.5;
 #X obj 360 36 hradio 15 1 0 8 empty empty empty 0 -8 0 10 -262144 -1
--1 0;
+-1 4;
 #X msg 452 187 0 \, 1 0.5 \, 1 0 0.1;
 #X msg 414 160 1 \, 0.2 0.2 \, 1 0.2 0.2;
 #X msg 473 216 1 \, 0 0.1 \, 1 0.1 0.1 \, 0 0.1 0.2 \, 1 0.8 0.3;
@@ -347,7 +349,6 @@
 #X msg 580 177 1 \, 0 0.5 \, 1 0.5 1;
 #X obj 169 426 outlet~;
 #X obj 168 366 expr~ if($v1!=1 && $v2>0 \, 1 \, 0);
-#X obj 44 53 loadbang;
 #X obj 37 152 f;
 #X msg 36 195 0 \, 1 \$1;
 #X msg 44 75 bang;
@@ -356,7 +357,8 @@
 #X obj 15 80 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 43 96 random 1000;
-#X connect 0 0 23 0;
+#X obj 48 40 r \$1-init-voices;
+#X connect 0 0 22 0;
 #X connect 2 0 7 0;
 #X connect 2 0 21 0;
 #X connect 3 0 18 0;
@@ -383,13 +385,13 @@
 #X connect 19 0 4 0;
 #X connect 21 0 20 0;
 #X connect 22 0 25 0;
-#X connect 23 0 26 0;
-#X connect 24 0 2 0;
-#X connect 25 0 29 0;
-#X connect 26 0 24 0;
-#X connect 27 0 23 1;
-#X connect 28 0 23 0;
-#X connect 29 0 27 0;
+#X connect 23 0 2 0;
+#X connect 24 0 28 0;
+#X connect 25 0 23 0;
+#X connect 26 0 22 1;
+#X connect 27 0 22 0;
+#X connect 28 0 26 0;
+#X connect 29 0 24 0;
 #X coords 0 -1 1 1 200 140 1 100 100;
 #X restore 844 250 pd granular-frequency-envelope;
 #X obj 504 654 throw~ collisions-left;
@@ -409,7 +411,7 @@
 #X obj 205 8 r \$1-voice-\$2-udp;
 #X obj 47 69 r \$1-mute-all-voices;
 #X obj 492 231 hradio 15 1 1 6 empty empty empty 0 -8 0 10 -262144
--1 -1 0;
+-1 -1 4;
 #N canvas 384 131 894 422 x-z-to-amplitude-envelope 0;
 #X obj 17 -8 inlet;
 #X obj 623 342 outlet~;
@@ -429,7 +431,7 @@
 #X floatatom 210 17 5 0 0 0 - - -;
 #N canvas 396 216 450 293 envelope-0 0;
 #X obj 58 74 switch~;
-#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X obj 61 253 throw~ \$0-amplitude-envelope;
 #X obj 180 35 r \$0-amplitude-parameter;
@@ -498,7 +500,7 @@
 #X restore 70 263 pd envelope-3;
 #N canvas 396 216 450 293 envelope-4 0;
 #X obj 58 74 switch~;
-#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
 ;
 #X obj 64 224 throw~ \$0-amplitude-envelope;
 #X obj 129 85 r \$0-amplitude-parameter;
@@ -559,6 +561,7 @@
 collision;
 #X msg 240 54 size 500 \, shape 2 \, color 3 \, texture 1 \, rotation
 2 \, x 250 \, y 299 \, z 4 \, time-to-live 5;
+#X obj 316 31 r \$1-init-voices;
 #X connect 0 0 58 0;
 #X connect 1 0 47 0;
 #X connect 2 0 33 0;
@@ -627,4 +630,5 @@ collision;
 #X connect 58 8 48 0;
 #X connect 58 9 33 0;
 #X connect 59 0 58 0;
+#X connect 60 0 59 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
