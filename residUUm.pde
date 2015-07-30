@@ -44,12 +44,12 @@ int particleBehavior;
 float angle;
 float halfAngle; 
 float radius1, radius2;
-float newFadeOut=16;
+float newFadeOut=10;
 float globalFadeOut=0;
 float outerAngle;
 float innerAngle;
 
-int maxNumParticles=46;
+int maxNumParticles=40;
 int numMessages=0;
 boolean collisions=true;
 public void setup() {
@@ -108,10 +108,10 @@ public void setup() {
 }
 
 //enable full screen presentation mode
-boolean sketchFullScreen()
-{
-  return true;
-}
+// boolean sketchFullScreen()
+// {
+//   return true;
+// }
 
 
 int callsToDraw=0;
@@ -145,8 +145,8 @@ public void draw() {
       float lifespan=getLifespan(n);
       if(lifespan<0){
         if(HERE == 0){
-          println("You shouldn't be here");
-          println("id: "+n+"; particle: "+particleIndex);
+          // println("You shouldn't be here");
+          // println("id: "+n+"; particle: "+particleIndex);
         }
         HERE=1;
         continue;// println("sending message for id: "+n+"; particle: "+particleIndex+"; lifespan: "+lifespan);
@@ -168,6 +168,7 @@ public void draw() {
       // newMessage.add("/locationz");
       // newMessage.add(map(particleLifespan.get(i), 360, 0, 5, 100));    
     }
+    // println("collisions:"+collisions);
     for(int i = 0; i < physics.particles.size(); i++){
       if(getIdFromParticle(i)<0)
         continue;
@@ -440,9 +441,17 @@ void keyPressed(){
     ellipse(1350, height - 100, 10, 10);
     return;
   }
+  if(key == 'f'){
+    ellipse(1350, height - 120, 10, 10);
+    for(int n=0; n<particleIdMapping.size(); n++){
+      fadeOut.set(n, newFadeOut);
+      // println("fadeout"+fadeOut.get(n));
+    }
+    return;
+  }
   collisions=true;
   if(key == 'n'){
-    newFadeOut=16;   
+    newFadeOut=10;   
     globalFadeOut=0;
     println("fade "+newFadeOut);
     ellipse(1350, height - 60, 10, 10);
@@ -456,16 +465,17 @@ void keyPressed(){
     return;
   }
   if(key == 'x'){
-    globalFadeOut+=16;
+    globalFadeOut+=8;
     ellipse(1350, height - 40, 10, 10);
     return;
   }
   if(key == 'z'){
     ellipse(1350, height - 20, 10, 10);
-    globalFadeOut-=16;
+    globalFadeOut-=8;
     if(globalFadeOut<0) 
       globalFadeOut=0;
     return;
   }
+
 }
 
