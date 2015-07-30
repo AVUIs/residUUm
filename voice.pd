@@ -1,4 +1,4 @@
-#N canvas 501 45 1519 807 10;
+#N canvas 125 38 1421 807 10;
 #X obj 193 -3 inlet;
 #X floatatom 206 172 5 0 500 2 size - -;
 #X obj 694 128 inlet;
@@ -18,18 +18,18 @@
 #N canvas 230 114 625 534 shape-to-osc 0;
 #X obj -5 252 tabosc4~;
 #X obj 111 46 r main-dollar-0;
-#X msg -19 137 set 1010-wavetable-0;
+#X msg -19 137 set 1002-wavetable-0;
 #X msg 110 79 set set \$1-wavetable-0;
 #X msg 123 101 set set \$1-wavetable-1;
 #X msg 146 124 set set \$1-wavetable-2;
 #X msg 165 145 set set \$1-wavetable-3;
 #X msg 182 166 set set \$1-wavetable-4;
-#X msg 17 181 set 1010-wavetable-2;
-#X msg 37 203 set 1010-wavetable-3;
-#X msg 54 224 set 1010-wavetable-4;
+#X msg 17 181 set 1002-wavetable-2;
+#X msg 37 203 set 1002-wavetable-3;
+#X msg 54 224 set 1002-wavetable-4;
 #X obj -5 413 outlet~;
 #X obj 76 9 inlet~;
-#X msg -6 159 set 1010-wavetable-1;
+#X msg -6 159 set 1002-wavetable-1;
 #X obj -6 363 spigot~;
 #X obj 83 277 noise~;
 #X obj 83 363 spigot~;
@@ -149,7 +149,7 @@
 #X coords 0 -1 1 1 60 40 1 100 100;
 #X restore 227 369 pd color-to-filterbank;
 #X obj 251 151 hradio 15 1 1 6 empty empty empty 0 -8 0 10 -262144
--1 -1 4;
+-1 -1 2;
 #X obj 253 -31 loadbang;
 #X obj 220 599 pan~;
 #X obj 166 637 throw~ particles-left;
@@ -261,7 +261,7 @@
 #X connect 11 0 6 0;
 #X connect 12 0 1 0;
 #X restore 670 457 pd granular-osc;
-#X obj 789 196 metrum 400 0;
+#X obj 789 194 metrum 400 0;
 #N canvas 387 128 450 679 y-to-cutoff 0;
 #X obj 49 8 inlet;
 #X obj 206 35 inlet~;
@@ -308,13 +308,13 @@
 #X msg 397 135 0 \, 1 0.5 \, 0 0.5 0.5;
 #N canvas 0 22 450 300 (subpatch) 0;
 #X array \$0-frequency-envelope 49 float 1;
-#A 0 0.131544 0.0208933 0.081467 0.0482921 0.234383 0.245901 0.321809
-0.299056 0.35978 0.310115 0.411202 0.453678 0.403677 0.520096 0.46529
-0.584757 0.440874 0.640655 0.651232 0.631739 0.757841 0.724544 0.735195
-0.731793 0.64823 0.541346 0.627469 0.565769 0.440921 0.456374 0.49028
-0.331933 0.420938 0.267496 0.274965 0.283989 0.249554 0.276097 0.123439
-0.115923 0.013777 -0.030063 0.126005 0.0666933 -0.0122698 0.0131596
--0.0787696 -0.00127636 -0.0718357;
+#A 0 0.0171682 0.0523407 0.109984 0.162224 0.202642 0.281487 0.295103
+0.18864 0.354073 0.329805 0.272231 0.452053 0.332929 0.475046 0.442855
+0.438441 0.595165 0.562588 0.625596 0.660003 0.724028 0.735124 0.703712
+0.686038 0.525569 0.561554 0.470209 0.5889 0.5567 0.415883 0.435651
+0.417733 0.346094 0.414044 0.265341 0.236496 0.314303 0.184864 0.080783
+0.208804 0.123236 0.0529205 0.117496 0.00261757 -0.0624553 -0.0714533
+0.0248863 -0.0312593 0.0201319;
 #X coords 0 1 49 -1 200 100 1 0 0;
 #X restore 100 140 graph;
 #X obj 36 246 *~ 50;
@@ -419,7 +419,7 @@
 #X obj 205 42 route collision;
 #X text 104 205 Mute does not mute collision;
 #X obj 357 212 / 360;
-#N canvas 779 134 894 422 x-z-y-to-amplitude-envelope 0;
+#N canvas 68 50 894 422 x-z-y-to-amplitude-envelope 0;
 #X obj 17 -8 inlet;
 #X obj 250 10 inlet;
 #X obj 17 118 select 0 1 2 3 4 5 6 7;
@@ -541,12 +541,13 @@
 #X obj 445 104 expr (1-$f1)*50;
 #X obj 626 45 inlet y;
 #X obj 623 342 *~;
-#X obj 637 124 sig~;
+#X obj 680 200 sig~;
 #X obj 611 372 outlet~;
-#X obj 638 184 lop~ 30;
-#X floatatom 696 134 5 0 0 0 - - -;
-#X floatatom 570 77 5 0 0 0 - - -;
+#X obj 637 232 lop~ 30;
 #X obj 628 78 expr (1-$f1+0.1)/1.1;
+#X obj 782 43 inlet;
+#X obj 687 150 *;
+#X obj 701 120 t b f;
 #X connect 0 0 17 0;
 #X connect 1 0 6 0;
 #X connect 2 0 14 0;
@@ -570,19 +571,24 @@
 #X connect 18 0 19 0;
 #X connect 24 0 11 0;
 #X connect 26 0 12 0;
-#X connect 27 0 33 0;
-#X connect 27 0 34 0;
+#X connect 27 0 32 0;
 #X connect 28 0 30 0;
 #X connect 29 0 31 0;
 #X connect 31 0 28 1;
+#X connect 32 0 34 0;
+#X connect 33 0 35 0;
 #X connect 34 0 29 0;
-#X connect 34 0 32 0;
+#X connect 35 0 34 0;
+#X connect 35 1 34 1;
 #X restore 333 428 pd x-z-y-to-amplitude-envelope;
 #X obj 514 592 expr~ $v1*$v2;
 #X obj 205 223 / 250;
 #X obj 792 437 r global-toggle;
 #X obj 480 210 / 900;
 #X obj 671 600 expr~ $v1*(1-$v2);
+#X obj 917 568 dbtorms;
+#X obj 910 515 expr $f1*30+80;
+#X msg 818 566 1;
 #X connect 0 0 62 0;
 #X connect 1 0 67 0;
 #X connect 2 0 28 0;
@@ -648,6 +654,7 @@
 #X connect 52 9 28 0;
 #X connect 53 0 65 2;
 #X connect 53 0 54 0;
+#X connect 53 0 72 0;
 #X connect 54 0 55 0;
 #X connect 57 0 25 0;
 #X connect 59 0 58 0;
@@ -663,4 +670,7 @@
 #X connect 69 0 32 0;
 #X connect 69 0 65 3;
 #X connect 70 0 35 0;
+#X connect 71 0 65 4;
+#X connect 72 0 71 0;
+#X connect 73 0 65 4;
 #X coords 0 -1 1 1 650 60 1 120 140;
