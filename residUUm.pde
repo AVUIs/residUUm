@@ -63,8 +63,8 @@ public void setup() {
   oscP5 = new OscP5(this, 11998);
 
   // set remote location 
-  //myRemoteLocation = new NetAddress("127.0.0.1", 3000);
-  myRemoteLocation = new NetAddress("192.168.2.1", 12003);
+  myRemoteLocation = new NetAddress("127.0.0.1", 12003);
+  // myRemoteLocation = new NetAddress("192.168.2.1", 12003);
 
   OscMessage newMessage = new OscMessage("/global");
   newMessage.add("/muteAll");
