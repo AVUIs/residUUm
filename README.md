@@ -13,12 +13,12 @@ Particles will move, attracted by the mouse cursor.
 Upon collision they will generate weird fancy sounds.
 
 Keyboard controls:
-'m' /mute/ new particles will have short lifetime
-'n' /normal/ new particles will have normal lifetime
-'s' /sustain/ new particles will have infinte lifetime
-'f' /forever/ applies the currently selected lifetime (m,n,s) to all existing particles
-'x' increases the fading rate for all particles
-'z' decreases the fading rate for all particles (minimum: 0)
+* '**m**' *mute* new particles will have short lifetime
+* '**n**' *normal* new particles will have normal lifetime
+* '**s**' *sustain* new particles will have infinte lifetime
+* '**f**' *forever* applies the currently selected lifetime (m,n,s) to all existing particles
+* '**x**' increases the fading rate for all particles
+* '**z**' decreases the fading rate for all particles (minimum: 0)
 
 
 
