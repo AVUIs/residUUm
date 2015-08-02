@@ -1,4 +1,4 @@
-#N canvas 125 38 1421 807 10;
+#N canvas 0 0 1354 683 10;
 #X obj 193 -3 inlet;
 #X floatatom 206 172 5 0 500 2 size - -;
 #X obj 694 128 inlet;
@@ -149,7 +149,7 @@
 #X coords 0 -1 1 1 60 40 1 100 100;
 #X restore 227 369 pd color-to-filterbank;
 #X obj 251 151 hradio 15 1 1 6 empty empty empty 0 -8 0 10 -262144
--1 -1 2;
+-1 -1 4;
 #X obj 253 -31 loadbang;
 #X obj 220 599 pan~;
 #X obj 166 637 throw~ particles-left;
@@ -308,13 +308,13 @@
 #X msg 397 135 0 \, 1 0.5 \, 0 0.5 0.5;
 #N canvas 0 22 450 300 (subpatch) 0;
 #X array \$0-frequency-envelope 49 float 1;
-#A 0 0.0171682 0.0523407 0.109984 0.162224 0.202642 0.281487 0.295103
-0.18864 0.354073 0.329805 0.272231 0.452053 0.332929 0.475046 0.442855
-0.438441 0.595165 0.562588 0.625596 0.660003 0.724028 0.735124 0.703712
-0.686038 0.525569 0.561554 0.470209 0.5889 0.5567 0.415883 0.435651
-0.417733 0.346094 0.414044 0.265341 0.236496 0.314303 0.184864 0.080783
-0.208804 0.123236 0.0529205 0.117496 0.00261757 -0.0624553 -0.0714533
-0.0248863 -0.0312593 0.0201319;
+#A 0 0.0748326 0.0120253 0.0949868 0.105667 0.0632701 0.227608 0.173913
+0.212337 0.358104 0.365953 0.388536 0.316699 0.464409 0.528786 0.539414
+0.516987 0.455178 0.599522 0.542679 0.626718 0.754136 0.722954 0.727537
+0.555573 0.681253 0.584144 0.531375 0.505347 0.430792 0.537321 0.357583
+0.393692 0.342218 0.292706 0.262723 0.242135 0.270312 0.237475 0.107996
+0.21092 0.184649 -0.0313831 0.0670544 -0.0462971 0.080983 -0.0670589
+-0.0241212 -0.053957 0.0267585;
 #X coords 0 1 49 -1 200 100 1 0 0;
 #X restore 100 140 graph;
 #X obj 36 246 *~ 50;
@@ -325,7 +325,7 @@
 #X msg 327 206 bang;
 #X msg 544 126 0 \, 1 0.5 \, 0 0.5 0.5;
 #X obj 360 36 hradio 15 1 0 8 empty empty empty 0 -8 0 10 -262144 -1
--1 0;
+-1 4;
 #X msg 452 187 0 \, 1 0.5 \, 1 0 0.1;
 #X msg 414 160 1 \, 0.2 0.2 \, 1 0.2 0.2;
 #X msg 473 216 1 \, 0 0.1 \, 1 0.1 0.1 \, 0 0.1 0.2 \, 1 0.8 0.3;
@@ -396,7 +396,7 @@
 #X obj 214 -64 r \$1-voice-\$2-udp;
 #X obj 74 76 r \$1-mute-all-voices;
 #X obj 541 162 hradio 15 1 1 6 empty empty z 0 -8 0 10 -262144 -1 -1
-0;
+4;
 #X msg 250 -5 size 500 \, shape 2 \, color 3 \, texture 1 \, rotation
 2 \, x 250 \, y 299 \, z 4 \, time-to-live 5;
 #X obj 326 -28 r \$1-init-voices;
@@ -436,7 +436,7 @@
 #X floatatom 210 17 5 0 0 0 - - -;
 #N canvas 396 216 450 293 envelope-0 0;
 #X obj 58 74 switch~;
-#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X obj 61 253 throw~ \$0-amplitude-envelope;
 #X obj 180 35 r \$0-amplitude-parameter;
@@ -505,7 +505,7 @@
 #X restore 70 263 pd envelope-3;
 #N canvas 396 216 450 293 envelope-4 0;
 #X obj 58 74 switch~;
-#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+#X obj 58 55 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
 ;
 #X obj 64 224 throw~ \$0-amplitude-envelope;
 #X obj 129 85 r \$0-amplitude-parameter;
@@ -582,15 +582,15 @@
 #X connect 35 1 34 1;
 #X restore 333 428 pd x-z-y-to-amplitude-envelope;
 #X obj 514 592 expr~ $v1*$v2;
-#X obj 205 223 / 250;
 #X obj 792 437 r global-toggle;
 #X obj 480 210 / 900;
 #X obj 671 600 expr~ $v1*(1-$v2);
 #X obj 917 568 dbtorms;
 #X obj 910 515 expr $f1*30+80;
 #X msg 818 566 1;
+#X obj 205 223 / 150;
 #X connect 0 0 62 0;
-#X connect 1 0 67 0;
+#X connect 1 0 73 0;
 #X connect 2 0 28 0;
 #X connect 3 0 1 0;
 #X connect 4 0 16 0;
@@ -600,7 +600,7 @@
 #X connect 9 0 8 0;
 #X connect 10 0 49 0;
 #X connect 11 0 10 0;
-#X connect 12 0 69 0;
+#X connect 12 0 68 0;
 #X connect 13 0 12 0;
 #X connect 14 0 42 0;
 #X connect 15 0 46 0;
@@ -622,10 +622,10 @@
 #X connect 32 0 36 0;
 #X connect 33 0 41 0;
 #X connect 33 0 66 1;
-#X connect 33 0 70 1;
+#X connect 33 0 69 1;
 #X connect 33 1 36 1;
 #X connect 36 0 66 0;
-#X connect 36 0 70 0;
+#X connect 36 0 69 0;
 #X connect 37 0 26 0;
 #X connect 38 0 22 1;
 #X connect 39 0 40 0;
@@ -654,7 +654,7 @@
 #X connect 52 9 28 0;
 #X connect 53 0 65 2;
 #X connect 53 0 54 0;
-#X connect 53 0 72 0;
+#X connect 53 0 71 0;
 #X connect 54 0 55 0;
 #X connect 57 0 25 0;
 #X connect 59 0 58 0;
@@ -665,12 +665,12 @@
 #X connect 64 0 19 0;
 #X connect 65 0 37 1;
 #X connect 66 0 34 0;
-#X connect 67 0 17 0;
-#X connect 68 0 30 0;
-#X connect 69 0 32 0;
-#X connect 69 0 65 3;
-#X connect 70 0 35 0;
-#X connect 71 0 65 4;
-#X connect 72 0 71 0;
-#X connect 73 0 65 4;
+#X connect 67 0 30 0;
+#X connect 68 0 32 0;
+#X connect 68 0 65 3;
+#X connect 69 0 35 0;
+#X connect 70 0 65 4;
+#X connect 71 0 70 0;
+#X connect 72 0 65 4;
+#X connect 73 0 17 0;
 #X coords 0 -1 1 1 650 60 1 120 140;

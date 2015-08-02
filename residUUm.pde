@@ -49,7 +49,7 @@ float globalFadeOut=0;
 float outerAngle;
 float innerAngle;
 
-int maxNumParticles=40;
+int maxNumParticles=80;
 int numMessages=0;
 boolean collisions=true;
 public void setup() {
@@ -108,10 +108,10 @@ public void setup() {
 }
 
 //enable full screen presentation mode
-// boolean sketchFullScreen()
-// {
-//   return true;
-// }
+boolean sketchFullScreen()
+{
+   return true;
+}
 
 
 int callsToDraw=0;
@@ -132,7 +132,7 @@ public void draw() {
   attr.setAttractor(new Vec(mouseX, mouseY));
   ellipse(attr.getAttractor().x, attr.getAttractor().y, attr.getRadius(), attr.getRadius());
 
-  if((callsToDraw&7)==0){
+  if((callsToDraw&1)==0){
     OscMessage newMessage = new OscMessage("/route");
     newMessage.add("/counter");
     newMessage.add(numMessages++);
@@ -206,10 +206,10 @@ public void draw() {
   if(mousePressed) {
     particleBehavior = (int)random(0, 4);
     int sizeBefore=physics.particles.size();
-    if(particleBehavior == 0) physics.addParticle(new VParticle(new Vec(mouseX, mouseY, 0), 1, random(5, 200)).addBehavior(new BCollision()));
+    if(particleBehavior == 0) physics.addParticle(new VParticle(new Vec(mouseX, mouseY, 0), 1, random(5, 120)).addBehavior(new BCollision()));
     else if(particleBehavior == 1) physics.addParticle(new VParticle(new Vec(mouseX, mouseY, 0), 1, random(5, 20)).addBehavior(new BAttractionLocal(rad * 5, 2)));
     else if(particleBehavior == 2) physics.addParticle(new VParticle(new Vec(mouseX, mouseY, 0), 1, random(50, 100)).addBehavior(new BCohesion(100, 1.5f, .5f)));
-    else if(particleBehavior == 3) physics.addParticle(new VParticle(new Vec(mouseX, mouseY, 0), 1, random(150, 250)).addBehavior(attr));
+    else if(particleBehavior == 3) physics.addParticle(new VParticle(new Vec(mouseX, mouseY, 0), 1, random(50, 150)).addBehavior(attr));
     int sizeAfter=physics.particles.size();
     if(sizeBefore==sizeAfter){
       // println("Size before: "+sizeBefore);
@@ -434,7 +434,7 @@ void keyPressed(){
   if(key == RETURN || key == ENTER)
     printArray();
   if(key == 'm'){
-    newFadeOut=200;
+    newFadeOut=50;
     globalFadeOut=0;
     collisions=false;
     println("fade "+newFadeOut);
@@ -451,7 +451,7 @@ void keyPressed(){
   }
   collisions=true;
   if(key == 'n'){
-    newFadeOut=10;   
+    newFadeOut=2.5;   
     globalFadeOut=0;
     println("fade "+newFadeOut);
     ellipse(1350, height - 60, 10, 10);
@@ -465,13 +465,13 @@ void keyPressed(){
     return;
   }
   if(key == 'x'){
-    globalFadeOut+=8;
+    globalFadeOut+=2;
     ellipse(1350, height - 40, 10, 10);
     return;
   }
   if(key == 'z'){
     ellipse(1350, height - 20, 10, 10);
-    globalFadeOut-=8;
+    globalFadeOut-=2;
     if(globalFadeOut<0) 
       globalFadeOut=0;
     return;
