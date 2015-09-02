@@ -1,4 +1,4 @@
-#N canvas 118 78 1380 766 10;
+#N canvas 1 58 1351 685 10;
 #X declare -lib mrpeach;
 #X obj 819 98 \$0;
 #X obj 819 75 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
@@ -1516,7 +1516,7 @@ normalize 1 \; \$1-wavetable-1 sinesum 2051 1 0 0.333333 0 0.2 0 0.142857
 #X connect 20 0 17 0;
 #X coords 0 -1 1 1 250 140 2 0 0;
 #X restore 93 33 pd mixer;
-#N canvas 0 123 1421 803 \$0-voices 1;
+#N canvas 72 148 1351 685 \$0-voices 0;
 #X obj 0 0 voice 1002 0;
 #X obj 660 0 voice 1002 1;
 #X obj 1320 0 voice 1002 2;
@@ -1564,17 +1564,6 @@ normalize 1 \; \$1-wavetable-1 sinesum 2051 1 0 0.333333 0 0.2 0 0.142857
 #X obj 1320 854 voice 1002 44;
 #X obj 0 915 voice 1002 45;
 #X restore 983 43 pd \$0-voices;
-#N canvas 360 214 500 279 test-voices 0;
-#X obj -1291 33 netsend 1;
-#X msg -1282 11 connect localhost 3000;
-#X obj -1343 -75 r \$0-udp-sender;
-#X msg -1197 -43 send id 0 collision \, send id 1 collision;
-#X obj -1277 -19 loadbang;
-#X connect 1 0 0 0;
-#X connect 2 0 0 0;
-#X connect 3 0 0 0;
-#X connect 4 0 1 0;
-#X restore 769 403 pd test-voices;
 #N canvas 415 23 1063 837 \$0-router 0;
 #X obj 0 40 r 1002-router;
 #X obj 0 60 route id;
@@ -1676,10 +1665,8 @@ normalize 1 \; \$1-wavetable-1 sinesum 2051 1 0 0.333333 0 0.2 0 0.142857
 #X connect 2 44 47 0;
 #X connect 2 45 48 0;
 #X restore 981 64 pd \$0-router;
-#X obj 395 231 voice-controller \$0 1;
-#X obj 39 231 voice-controller \$0 0;
 #X obj 819 48 loadbang;
-#N canvas 211 23 1158 850 oscreceiver 1;
+#N canvas 203 58 1158 685 oscreceiver 0;
 #X obj -83 102 unpackOSC;
 #X obj -1 12 import mrpeach;
 #X obj -126 363 list split 2;
@@ -1914,7 +1901,7 @@ normalize 1 \; \$1-wavetable-1 sinesum 2051 1 0 0.333333 0 0.2 0 0.142857
 #X connect 85 0 84 0;
 #X connect 86 0 12 0;
 #X restore 985 87 pd oscreceiver;
-#N canvas 549 343 1152 484 init 1;
+#N canvas 132 110 1152 484 init 0;
 #X floatatom 105 118 5 1 200000 1 number_of_voices - #0-number-of-voices
 ;
 #X obj 104 162 bng 30 250 50 0 empty empty init 35 15 0 10 -204786
@@ -2047,6 +2034,7 @@ normalize 1 \; \$1-wavetable-1 sinesum 2051 1 0 0.333333 0 0.2 0 0.142857
 #X obj 52 257 t b b;
 #X obj 117 336 delay 5000;
 #X msg 98 63 46;
+#X msg 21 382 turn audio on \; pd dsp 1;
 #X connect 1 0 31 0;
 #X connect 2 0 4 0;
 #X connect 2 0 9 0;
@@ -2070,9 +2058,10 @@ normalize 1 \; \$1-wavetable-1 sinesum 2051 1 0 0.333333 0 0.2 0 0.142857
 #X connect 32 0 8 0;
 #X connect 32 0 24 0;
 #X connect 32 0 28 0;
+#X connect 32 0 34 0;
 #X connect 33 0 0 0;
 #X coords 0 -1 1 1 150 180 2 100 100;
-#X restore 646 529 pd init;
+#X restore 547 400 pd init;
 #X connect 0 0 3 0;
 #X connect 1 0 0 0;
-#X connect 10 0 1 0;
+#X connect 7 0 1 0;
