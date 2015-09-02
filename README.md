@@ -2,9 +2,15 @@
 
 ## Prerequisites
 
-To run this software you will need Processing with the punktiert library installed and PureData (pd-extended includes all the (few) externals used in the project).
+To run this software you will need Processing with the punktiert, oscP5 and netP5 libraries and PureData with a few externals (pd-extended includes all the  externals used in the project).
 
-Make sure you follow the instructions in main.pd as you open it.
+oscP5 and netP5 should be easily automatically installed from Processing, while automatic installation often fails for punktiert.
+To install punktiert, get the zip file from http://www.lab-eds.org/punktiert and follow instructions at https://github.com/djrkohler/punktiert/blob/master/resources/install_instructions.txt
+
+To run the software:
+* open the main.pd file in pd-extended and it the button you find at the bottom of the window, wait a few seconds and you are ready to go.
+* adjust the levels for particles, collisions and master in the main window
+* keep the pd window open and open residUUm.pde in Processing and hit run. You are all set to go!
 
 ## Usage
 
