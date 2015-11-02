@@ -21,6 +21,9 @@ int amount = 0;
 int sides;
 float rad;
 
+int satVal;
+int brightVal;
+
 IntList particleIdMapping;
 float particleSize;
 FloatList particleShape;
@@ -63,12 +66,17 @@ public void setup() {
   oscP5 = new OscP5(this, 11998);
 
   // set remote location 
-  myRemoteLocation = new NetAddress("127.0.0.1", 12003);
-  // myRemoteLocation = new NetAddress("192.168.2.1", 12003);
+  myRemoteLocation = new NetAddress("127.0.0.1", 12004);
+  // myRemoteLocation = new NetAddress("192.168.2.1", 12004);
 
   OscMessage newMessage = new OscMessage("/global");
   newMessage.add("/muteAll");
   oscP5.send(newMessage, myRemoteLocation);
+
+  OscMessage backMessage = new OscMessage("/global");
+  backMessage.add("/back");
+  backMessage.add(0);
+  oscP5.send(backMessage, myRemoteLocation);
 
   particleGroup = new FloatList();
   particleLifespan = new FloatList();
@@ -117,7 +125,10 @@ boolean sketchFullScreen()
 int callsToDraw=0;
 int HERE=0;
 public void draw() {
-  background(map(mouseX, 0, width, 0, 360), 100, map(mouseY, 0, width, 0, 100), 360);
+  if(satVal < 60) background(360, 100, 0);
+  else if(brightVal < 50) background(360, 0, 100);
+  else background(map(mouseX, 0, width, 0, 360), map(mouseX, 0, width, 0, 100), map(mouseY, 0, height, 0, 100));
+  
   cursor(CROSS);
 
   physics.update();
@@ -194,7 +205,36 @@ public void draw() {
           newMessage.add(n);
           newMessage.add("/collision");
           newMessage.add(1);
-          point(physics.particles.get(i).x, physics.particles.get(i).y);
+          //point(physics.particles.get(i).x, physics.particles.get(i).y);
+          //ellipse(physics.particles.get(i).x, physics.particles.get(i).y, rippleSize, rippleSize);
+          float rippleX;
+          float rippleY;
+
+          float radAng;
+          float radiusNoise = random(10);
+          float thisRadius;
+
+          float lastX = random(width);
+          float lastY = random(height);
+
+          beginShape();
+          if(satVal < 60) stroke(360, 0, 100, random(100));
+          else if(brightVal < 50) stroke(360, 100, 0, random(100));
+          strokeWeight(50);
+          for(int j = 0; j <= 360; j ++) {
+            radAng = radians(j);
+            radiusNoise += 0.005;
+            thisRadius = physics.particles.get(i).getRadius() + (noise(radiusNoise) * random(physics.particles.get(i).getRadius()));
+
+            rippleX = physics.particles.get(i).x + (thisRadius * cos(radAng));
+            rippleY = physics.particles.get(i).y + (thisRadius * sin(radAng));
+
+            line(rippleX, rippleY, lastX, lastY);
+
+            lastX = rippleX;
+            lastY = rippleY;
+          }
+          endShape();
         }
       }
     }
@@ -204,6 +244,26 @@ public void draw() {
   callsToDraw ++;
    
   if(mousePressed) {
+    satVal = (int(random(55, 100)));
+    brightVal = (int(random(45, 100)));
+    if(satVal < 60) {
+      OscMessage backMessage = new OscMessage("/global");
+      backMessage.add("/back");
+      backMessage.add(2);
+      oscP5.send(backMessage, myRemoteLocation);
+    }
+    else if(brightVal < 50) {
+      OscMessage backMessage = new OscMessage("/global");
+      backMessage.add("/back");
+      backMessage.add(1);
+      oscP5.send(backMessage, myRemoteLocation);
+    }
+    else {
+      OscMessage backMessage = new OscMessage("/global");
+      backMessage.add("/back");
+      backMessage.add(0);
+      oscP5.send(backMessage, myRemoteLocation);
+    }
     particleBehavior = (int)random(0, 4);
     int sizeBefore=physics.particles.size();
     if(particleBehavior == 0) physics.addParticle(new VParticle(new Vec(mouseX, mouseY, 0), 1, random(5, 120)).addBehavior(new BCollision()));
@@ -303,9 +363,12 @@ void drawShape() {
 
     // println("I drew this id"+id);
     strokeWeight(1);
+    strokeCap(ROUND);
+    strokeJoin(ROUND);
 
     stroke(map(id, 1, maxNumParticles, 360, 0), 100, 100, map(particleLifespan.get(id), 360, 0, 100, 0));
-    fill(map(id, 1, maxNumParticles, 0, 360), 100, 100, map(particleLifespan.get(id), 360, 0, 100, 0));
+    fill(map(id, 1, maxNumParticles, 0, 360), map(particleLifespan.get(id), 360, 0, 100, 60), map(particleLifespan.get(id), 360, 0, 100, 50), map(particleLifespan.get(id), 360, 0, 100, 0));
+    //fill(map(id, 1, maxNumParticles, 0, 360), satVal, brightVal, map(particleLifespan.get(id), 360, 0, 100, 0));
 
     if((shape < 2) || ((shape != 3) && (shape > 2))) {
       pushMatrix();
@@ -361,17 +424,16 @@ void drawShape() {
           continue;
         strokeCap(ROUND);
         strokeJoin(ROUND);
-        strokeWeight(1);
+        strokeWeight(2);
         rotate(particleRotation);
         stroke(map(j, 1, physics.particles.size(), 360, 0), 100, 100, map(particleLifespan.get(idj), 360, 0, 100, 0));
-        line(physics.particles.get(j).x, physics.particles.get(j).y, physics.particles.get(j).z, physics.particles.get(j + 1).x, physics.particles.get(j + 1).
-          y, physics.particles.get(j + 1).z);
+        line(physics.particles.get(j).x, physics.particles.get(j).y, physics.particles.get(j).z, 
+             physics.particles.get(j + 1).x, physics.particles.get(j + 1).y, physics.particles.get(j + 1).z);
       }
       popMatrix();
     }   
   }
 }
-
 
 int assignIdToParticle(int particle){
   int id=getAvailableId();
@@ -433,7 +495,7 @@ void keyPressed(){
   noStroke();
   if(key == RETURN || key == ENTER)
     printArray();
-  if(key == 'm'){
+  if(key == 'q'){
     newFadeOut=50;
     globalFadeOut=0;
     collisions=false;
@@ -441,7 +503,7 @@ void keyPressed(){
     ellipse(1350, height - 100, 10, 10);
     return;
   }
-  if(key == 'f'){
+  if(key == 'w'){
     ellipse(1350, height - 120, 10, 10);
     for(int n=0; n<particleIdMapping.size(); n++){
       fadeOut.set(n, newFadeOut);
@@ -450,7 +512,7 @@ void keyPressed(){
     return;
   }
   collisions=true;
-  if(key == 'n'){
+  if(key == 'a'){
     newFadeOut=2.5;   
     globalFadeOut=0;
     println("fade "+newFadeOut);
