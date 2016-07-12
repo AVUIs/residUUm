@@ -4,6 +4,8 @@ import punktiert.physics.*;
 import oscP5.*;
 import netP5.*;
 
+import java.util.regex.*;
+
 // declare OSC objects
 OscP5 oscP5;
 NetAddress myRemoteLocation;
@@ -24,6 +26,17 @@ float rad;
 int satVal;
 int brightVal;
 
+float radiusNoise = random(10);
+
+boolean oneLine = true;
+boolean twoLines = false;
+
+float lineChange = 0.0;
+
+int frameGague = 24;
+
+float [] multScaler = {0.5, 0.5, 0.5, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 5};
+
 IntList particleIdMapping;
 float particleSize;
 FloatList particleShape;
@@ -43,6 +56,8 @@ int groupCounter = 0;
 int maxGroups = 6;
 IntList shapeId;
 int particleBehavior;
+// IntList sideId;
+// int circSide;
 
 float angle;
 float halfAngle; 
@@ -52,12 +67,12 @@ float globalFadeOut=0;
 float outerAngle;
 float innerAngle;
 
-int maxNumParticles=80;
+int maxNumParticles=45;
 int numMessages=0;
 boolean collisions=true;
 public void setup() {
   size(displayWidth, displayHeight, OPENGL);
-  frameRate(24);
+  //size(800, 600, OPENGL);
   colorMode(HSB, 360, 100, 100, 100);
   smooth(8);
 
@@ -83,6 +98,7 @@ public void setup() {
   fadeOut = new FloatList();
   particleIdMapping = new IntList();
   shapeId = new IntList();
+  // sideId = new IntList();
   for(int n = 0; n < maxNumParticles; n++) {
     particleLifespan.append(-1);
     particleIdMapping.append(-1);
@@ -125,9 +141,11 @@ boolean sketchFullScreen()
 int callsToDraw=0;
 int HERE=0;
 public void draw() {
-  if(satVal < 60) background(360, 100, 0);
+  frameRate(frameGague);
+
+  /*if(satVal < 60) background(360, 100, 0);
   else if(brightVal < 50) background(360, 0, 100);
-  else background(map(mouseX, 0, width, 0, 360), map(mouseX, 0, width, 0, 100), map(mouseY, 0, height, 0, 100));
+  else */background(map(mouseX, 0, width, 0, 360), map(mouseX, 0, width, 0, 100), map(mouseY, 0, height, 0, 100));
   
   cursor(CROSS);
 
@@ -207,34 +225,66 @@ public void draw() {
           newMessage.add(1);
           //point(physics.particles.get(i).x, physics.particles.get(i).y);
           //ellipse(physics.particles.get(i).x, physics.particles.get(i).y, rippleSize, rippleSize);
-          float rippleX;
-          float rippleY;
+          float rippleX1;
+          float rippleY1;
+          float rippleX2;
+          float rippleY2;
 
           float radAng;
-          float radiusNoise = random(10);
+          
           float thisRadius;
 
-          float lastX = random(width);
-          float lastY = random(height);
+          float lastX1 = random(width);
+          float lastY1 = random(height);
+          float lastX2 = random(width);
+          float lastY2 = random(height);
+
+          float multScalerVal = 1.0;
 
           beginShape();
-          if(satVal < 60) stroke(360, 0, 100, random(100));
-          else if(brightVal < 50) stroke(360, 100, 0, random(100));
-          strokeWeight(50);
+
           for(int j = 0; j <= 360; j ++) {
             radAng = radians(j);
             radiusNoise += 0.005;
-            thisRadius = physics.particles.get(i).getRadius() + (noise(radiusNoise) * random(physics.particles.get(i).getRadius()));
+            thisRadius = physics.particles.get(i).getRadius() * multScalerVal + (noise(radiusNoise) * random(physics.particles.get(i).getRadius()));
 
-            rippleX = physics.particles.get(i).x + (thisRadius * cos(radAng));
-            rippleY = physics.particles.get(i).y + (thisRadius * sin(radAng));
+            if(oneLine) multScalerVal = multScaler[5];
+              else if(twoLines) multScalerVal = multScaler[(int)random(0, 15)];
 
-            line(rippleX, rippleY, lastX, lastY);
+            rippleX1 = physics.particles.get(i).x + (thisRadius * cos(radAng));
+            rippleY1 = physics.particles.get(i).y + (thisRadius * sin(radAng));
 
-            lastX = rippleX;
-            lastY = rippleY;
+            rippleX2 = physics.particles.get(n).x + (thisRadius * cos(radAng));
+            rippleY2 = physics.particles.get(n).y + (thisRadius * sin(radAng));
+
+            if(oneLine) {
+              strokeWeight(map(mouseX, 0, width, j, 50));
+              if(satVal < 60) stroke(360, 0, 100, random(100));
+              else if(brightVal < 50) stroke(360, 100, 0, random(100));
+              else stroke(map(getIdFromParticle(i), 1, maxNumParticles, 0, 360), 100, 100, random(1, 15));
+
+              line(rippleX1, rippleY1, lastX1, lastY1);
+            }
+            else if(twoLines) {
+              strokeWeight(random(lineChange));
+              if(satVal < 60) stroke(360, 0, 100, random(100));
+              else if(brightVal < 50) stroke(360, 100, 0, random(100));
+              else stroke(map(getIdFromParticle(i), 1, maxNumParticles, 0, 360), 100, 100, random(100));
+              line(rippleX1, rippleY1, lastX1, lastY1);
+
+              if(satVal < 60) stroke(360, 0, 100, random(100));
+              else if(brightVal < 50) stroke(360, 100, 0, random(100));
+              else stroke(map(getIdFromParticle(n), 1, maxNumParticles, 360, 0), 100, 100, random(100));
+              line(rippleX2, rippleY2, lastX2, lastY2);
+            } 
+
+            lastX1 = rippleX1;
+            lastY1 = rippleY1;
+
+            lastX2 = rippleX2;
+            lastY2 = rippleY2;
           }
-          endShape();
+          endShape(); 
         }
       }
     }
@@ -285,6 +335,7 @@ public void draw() {
         // printArray();
       } else {
         shapeId.set(id, (int)random(0, 5));
+        // sideId.set(id, (int)random(20, 360));
         particleLifespan.set(id, random(200, 360)); //and initialize lifespan
         fadeOut.set(id, newFadeOut);
       }
@@ -330,14 +381,15 @@ void mouseReleased() {
 }
 
 void drawShape() {
-
   particleRotation = radians((int)random(0, 360)); //radians(frameCount);
-  
+
   for(int i = 0; i < physics.particles.size(); i ++) {
     int id=getIdFromParticle(i);
     if(id < 0)
       continue;
     int shape=shapeId.get(id);
+    // if(shape == 4) circSide = sideId.get(id);
+    //if(shape != 4) particleRotation = radians((int)random(0, 360)); //radians(frameCount);
     switch((shape)) {
       case 0: //rectangle
         shape = 0;
@@ -355,7 +407,7 @@ void drawShape() {
         break;
       case 4: //ellipse
         shape = 4;
-        sides = 360;
+        sides = 360; //circSide;
         break;
     } 
     outerAngle = TWO_PI / sides;
@@ -363,8 +415,6 @@ void drawShape() {
 
     // println("I drew this id"+id);
     strokeWeight(1);
-    strokeCap(ROUND);
-    strokeJoin(ROUND);
 
     stroke(map(id, 1, maxNumParticles, 360, 0), 100, 100, map(particleLifespan.get(id), 360, 0, 100, 0));
     fill(map(id, 1, maxNumParticles, 0, 360), map(particleLifespan.get(id), 360, 0, 100, 60), map(particleLifespan.get(id), 360, 0, 100, 50), map(particleLifespan.get(id), 360, 0, 100, 0));
@@ -372,6 +422,7 @@ void drawShape() {
 
     if((shape < 2) || ((shape != 3) && (shape > 2))) {
       pushMatrix();
+      radiusNoise += 0.005;
         beginShape();
           for (int j = 0; j < sides; j ++) {
               float x = physics.particles.get(i).x + cos(j * outerAngle - particleRotation) * physics.particles.get(i).getRadius();
@@ -382,8 +433,9 @@ void drawShape() {
           
           // beginContour();
           // for (int j = 0; j < sides; j ++) {
-          //     float x = physics.particles.get(i).x + cos(j * innerAngle + particleRotation) * physics.particles.get(i).getRadius()/2; // - random(0, (physics.particles.get(i).getRadius() - 2)));
-          //     float y = physics.particles.get(i).y + sin(j * innerAngle + particleRotation) * physics.particles.get(i).getRadius()/2; // - random(0, (physics.particles.get(i).getRadius() - 2)));
+          //   radiusNoise += 0.005;
+          //     float x = physics.particles.get(i).x + noise(radiusNoise) * cos(j * innerAngle + particleRotation) * physics.particles.get(i).getRadius()/2; // - random(0, (physics.particles.get(i).getRadius() - 2)));
+          //     float y = physics.particles.get(i).y + noise(radiusNoise) * sin(j * innerAngle + particleRotation) * physics.particles.get(i).getRadius()/2; // - random(0, (physics.particles.get(i).getRadius() - 2)));
           //     float z = map(particleLifespan.get(id), 360, 0, 100, 0); //physics.particles.get(i).z; //map(particleLifespan.get(id), 360, 0, 0, 10);
           //     vertex(x, y, z);
           // }
@@ -422,8 +474,6 @@ void drawShape() {
         int idj=getIdFromParticle(j);
         if(idj < 0)
           continue;
-        strokeCap(ROUND);
-        strokeJoin(ROUND);
         strokeWeight(2);
         rotate(particleRotation);
         stroke(map(j, 1, physics.particles.size(), 360, 0), 100, 100, map(particleLifespan.get(idj), 360, 0, 100, 0));
@@ -496,15 +546,15 @@ void keyPressed(){
   if(key == RETURN || key == ENTER)
     printArray();
   if(key == 'q'){
-    newFadeOut=50;
+    newFadeOut=50;  
     globalFadeOut=0;
     collisions=false;
     println("fade "+newFadeOut);
-    ellipse(1350, height - 100, 10, 10);
+    //ellipse(1350, height - 100, 10, 10);
     return;
   }
   if(key == 'w'){
-    ellipse(1350, height - 120, 10, 10);
+    //ellipse(1350, height - 120, 10, 10);
     for(int n=0; n<particleIdMapping.size(); n++){
       fadeOut.set(n, newFadeOut);
       // println("fadeout"+fadeOut.get(n));
@@ -516,28 +566,87 @@ void keyPressed(){
     newFadeOut=2.5;   
     globalFadeOut=0;
     println("fade "+newFadeOut);
-    ellipse(1350, height - 60, 10, 10);
+    //ellipse(1350, height - 60, 10, 10);
     return;
   }
   if(key == 's'){
     newFadeOut=0;  
     globalFadeOut=0;
     println("fade "+newFadeOut);
-    ellipse(1350, height - 20, 10, 10);
+    //ellipse(1350, height - 20, 10, 10);
     return;
   }
   if(key == 'x'){
     globalFadeOut+=2;
-    ellipse(1350, height - 40, 10, 10);
+    //ellipse(1350, height - 40, 10, 10);
     return;
   }
   if(key == 'z'){
-    ellipse(1350, height - 20, 10, 10);
+    //ellipse(1350, height - 20, 10, 10);
     globalFadeOut-=2;
     if(globalFadeOut<0) 
       globalFadeOut=0;
     return;
   }
 
+  if(key == 'l') {
+    oneLine = !oneLine;
+    twoLines = !twoLines;
+  }
+
+  char [] s = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+  for(float i = 0; i < s.length; i ++) {
+    if(key == s[(int)i]) lineChange = i;
+  
+    switch((int)lineChange) {
+      case 0:
+        lineChange = 0.5;
+        break;
+      case 1:
+        lineChange = 1;
+        break;
+      case 2:
+        lineChange = 2;
+        break;
+      case 3:
+        lineChange = 3;
+        break;
+      case 4:
+        lineChange = 4;
+        break;
+      case 5:
+        lineChange = 5;
+        break;
+      case 6:
+        lineChange = 6;
+        break;
+      case 7:
+        lineChange = 7;
+        break;
+      case 8:
+        lineChange = 8;
+        break;
+      case 9:
+        lineChange = 9;
+        break;
+    }
+  }
+
+  if ((key == 'g') || (key == 'h')) {
+
+    if (key == 'g') {
+      frameGague --;
+      if(frameGague <= 0) frameGague = 24;
+    } else if (key == 'h') {
+            frameGague ++;
+            if(frameGague >= 25) frameGague = 1;
+           }
+
+    println("frameGague: " + frameGague);
+  }
 }
+
+  
+  
 
